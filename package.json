@@ -12,8 +12,14 @@
   },
   "keywords": [
     "react-native",
+    "native",
+    "android",
+    "ios",
     "ntp",
-    "sync"
+    "sync",
+    "clock",
+    "time",
+    "date"
   ],
   "author": "Gian <hello@gian.sh> (https://gian.sh/)",
   "license": "MIT",
@@ -23,6 +29,7 @@
   "homepage": "https://github.com/incrementing/react-native-ntp-sync#readme",
   "dependencies": {
     "buffer": "^5.6.0",
+    "react-native-background-timer": "^2.4.1",
     "react-native-udp": "^4.0.3"
   },
   "devDependencies": {

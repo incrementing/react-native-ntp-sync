@@ -15,3 +15,4 @@ react-native-ntp-sync is based on [react-native-clock-sync](https://github.com/a
 ## Dependencies
 - [buffer](https://www.npmjs.com/package/buffer)
 - [react-native-udp](https://www.npmjs.com/package/react-native-udp)
+- [react-native-background-timer](https://www.npmjs.com/package/react-native-background-timer)

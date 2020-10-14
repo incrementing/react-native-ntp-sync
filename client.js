@@ -1,5 +1,9 @@
+import BackgroundTimer from "react-native-background-timer";
 import { Buffer } from "buffer";
 import dgram from "react-native-udp";
+
+setTimeout = BackgroundTimer.setTimeout.bind(BackgroundTimer);
+clearTimeout = BackgroundTimer.clearTimeout.bind(BackgroundTimer);
 
 /**
  * Gets the current time from the parsed NTP Server.
