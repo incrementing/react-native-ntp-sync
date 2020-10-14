@@ -1,0 +1,31 @@
+{
+  "name": "react-native-ntp-sync",
+  "version": "1.0.1-a",
+  "description": "Sync time using NTP servers",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/incrementing/react-native-ntp-sync.git"
+  },
+  "keywords": [
+    "react-native",
+    "ntp",
+    "sync"
+  ],
+  "author": "Gian <hello@gian.sh> (https://gian.sh/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/incrementing/react-native-ntp-sync/issues"
+  },
+  "homepage": "https://github.com/incrementing/react-native-ntp-sync#readme",
+  "dependencies": {
+    "buffer": "^5.6.0",
+    "react-native-udp": "^4.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  }
+}
