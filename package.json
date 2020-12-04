@@ -1,6 +1,6 @@
 {
   "name": "react-native-ntp-sync",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Sync time using NTP servers",
   "main": "index.js",
   "scripts": {
