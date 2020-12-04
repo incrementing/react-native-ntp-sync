@@ -1,14 +1,18 @@
 import BackgroundTimer from "react-native-background-timer";
-setInterval = BackgroundTimer.setInterval.bind(BackgroundTimer);
+setInterval = (fn, ms = 0) => {
+  const numberMs = Number(ms);
+  if (isNaN(numberMs)) return BackgroundTimer.setInterval(fn, 0);
+  return BackgroundTimer.setInterval(fn, numberMs);
+};
 
 let NTPSync = function () {
   this.client = require("./client");
 
   this.ntpServers = [
+    { server: "time.cloudflare.com", port: 123 },
+    { server: "time.google.com", port: 123 },
     { server: "0.pool.ntp.org", port: 123 },
     { server: "1.pool.ntp.org", port: 123 },
-    { server: "2.pool.ntp.org", port: 123 },
-    { server: "3.pool.ntp.org", port: 123 },
   ];
 
   this.limit = 10;
