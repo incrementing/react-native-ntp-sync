@@ -5,20 +5,50 @@ setInterval = (fn, ms = 0) => {
   return BackgroundTimer.setInterval(fn, numberMs);
 };
 
-let NTPSync = function () {
+let NTPSync = function (config) {
   this.client = require("./client");
+  if (!config) {
+    config = {};
+  }
 
-  this.ntpServers = [
-    { server: "time.cloudflare.com", port: 123 },
-    { server: "time.google.com", port: 123 },
-    { server: "0.pool.ntp.org", port: 123 },
-    { server: "1.pool.ntp.org", port: 123 },
-  ];
+
+  this.ntpServers = [];
+  if (config.hasOwnProperty('servers')) {
+      config.servers.forEach(function (s, i) {
+        if (typeof s === 'string' && s.length > 0) {
+          this.ntpServers.push({
+            server: s,
+            port: 123
+          });
+        } else if (typeof s === 'object') {
+          if (s.server && typeof s.server === 'string' && s.port && typeof s.port === 'number' && s.port > 0) {
+            this.ntpServers.push({
+              server: s.server,
+              port: s.port
+            });
+          } 
+        } 
+      }, this);
+  }
+  if(this.ntpServers.length == 0){
+    this.ntpServers = [
+      { server: "time.cloudflare.com", port: 123 },
+      { server: "time.google.com", port: 123 },
+      { server: "0.pool.ntp.org", port: 123 },
+      { server: "1.pool.ntp.org", port: 123 },
+    ];
+  } 
 
   this.limit = 10;
+  if(parseInt(config.history) > 0){
+    this.limit = parseInt(config.history);
+  }
+  this.tickRate = 300;
+  if(parseFloat(config.syncDelay) > 0){
+    this.tickRate = parseFloat(config.syncDelay);
+  }
   this.currentIndex = 0;
   this.tickId = null;
-  this.tickRate = 300;
   this.tickRate = this.tickRate * 1000;
   this.historyDetails = {
     currentConsecutiveErrorCount: 0,
@@ -60,6 +90,7 @@ NTPSync.prototype.computeAndUpdate = function (ntpDate) {
  */
 NTPSync.prototype.getDelta = function (callback) {
   let fetchingServer = Object.assign({}, this.historyDetails.currentServer);
+
   this.client.getNetworkTime(
     this.historyDetails.currentServer.server,
     this.historyDetails.currentServer.port,

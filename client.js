@@ -23,7 +23,7 @@ export const getNetworkTime = (server, port, callback) => {
     type: "udp4",
     debug: false,
   });
-  client.bind(0);
+  //client.bind(0);
 
   let data = Buffer.alloc(48);
   data[0] = 0x1b;
@@ -48,40 +48,45 @@ export const getNetworkTime = (server, port, callback) => {
     clearTimeout(timeout);
   });
 
-  client.send(data, 0, data.length, port, server, err => {
-    if (err) {
-      if (error) {
-        return;
-      }
-      clearTimeout(timeout);
-      callback(err, null);
-      error = true;
-      client.close();
-      return;
+  client.once("message", msg => {
+    clearTimeout(timeout);
+    client.close();
+
+    let offsetTransmitTime = 40,
+      intpart = 0,
+      fractpart = 0;
+
+    for (var i = 0; i <= 3; i++) {
+      intpart = 256 * intpart + msg[offsetTransmitTime + i];
     }
 
-    client.once("message", msg => {
-      clearTimeout(timeout);
-      client.close();
+    for (i = 4; i <= 7; i++) {
+      fractpart = 256 * fractpart + msg[offsetTransmitTime + i];
+    }
 
-      let offsetTransmitTime = 40,
-        intpart = 0,
-        fractpart = 0;
+    let milliseconds = intpart * 1000 + (fractpart * 1000) / 0x100000000;
 
-      for (var i = 0; i <= 3; i++) {
-        intpart = 256 * intpart + msg[offsetTransmitTime + i];
+    let date = new Date("Jan 01 1900 GMT");
+    date.setUTCMilliseconds(date.getUTCMilliseconds() + milliseconds);
+
+    callback(null, date);
+  });
+
+  client.once("listening", () => {
+    client.send(data, 0, data.length, port, server, err => {
+      if (err) {
+        if (error) {
+          return;
+        }
+        clearTimeout(timeout);
+        callback(err, null);
+        error = true;
+        client.close();
+        return;
       }
-
-      for (i = 4; i <= 7; i++) {
-        fractpart = 256 * fractpart + msg[offsetTransmitTime + i];
-      }
-
-      let milliseconds = intpart * 1000 + (fractpart * 1000) / 0x100000000;
-
-      let date = new Date("Jan 01 1900 GMT");
-      date.setUTCMilliseconds(date.getUTCMilliseconds() + milliseconds);
-
-      callback(null, date);
+  
     });
   });
+  client.bind(0);
+
 };
