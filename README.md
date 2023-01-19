@@ -1,3 +1,6 @@
+# ⚠️ DEPRECATED ⚠️
+Please try [ruanitto/react-native-ntp-sync](https://github.com/ruanitto/react-native-ntp-sync).
+
 # react-native-ntp-sync
 Sync time using NTP (Network Time Protocol) servers.
 
